@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/memory_game.css">
+    <meta charset="UTF-8">
+    <title>Jquery</title>
+</head>
+<body>
+
+<div class="container" style="align-content: center;">
+    <form data-toggle="validator" role="form">
+        <div class="form-group col-sm-2">
+            <label for="inputSetNum" class="control-label">Cards For a Set</label>
+            <div class="input-group">
+                <input type="number" class="form-control" id="inputSetNum" data-match="#inputCardsNum" min="2" max="10"
+                       placeholder="2-10" data-error="Between 2 - 10 Only" value="2" required>
+                <div class="help-block">Between 2 - 10 Only</div>
+            </div>
+        </div>
+        <div class="form-group col-sm-2">
+            <label for="inputCardsNum" class="control-label">Types Of Cards</label>
+            <div class="input-group">
+                <input type="number" class="form-control" id="inputCardsNum" min="2" max="18" placeholder="2-18"
+                       data-error="Between 2 - 18 Only" value="2" required>
+                <div class="help-block">Between 2 - 18 Only</div>
+            </div>
+        </div>
+        <br/>
+    </form>
+    <!--<div class="form-group col-sm-1">-->
+        <button id="ButtonStart" class="btn btn-default">Start</button>
+    <!--</div>-->
+    <div class="container" id="subContainer">
+
+    </div>
+</div>
+
+<script src="js/lodash.js"></script>
+<script src="js/validator.js"></script>
+<script src="js/jquery-2.2.4.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/memory_game.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+.row{
+    clear: left;
+}
+
+.card{
+    float: left;
+    border: 1px;
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
+.front_card{
+    position: static;
+    top: 0;
+    left: 0;
+    height: 120px;
+    width: 180px;
+}
+
+.back_card{
+    position: absolute;
+    /*position: relative;*/
+    top: 0;
+    left: 0;
+    height: 120px;
+    width: 180px;
+}
