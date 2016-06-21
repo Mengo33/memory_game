@@ -18,13 +18,15 @@ const sounds = {
 };
 
 const play_sound = function (sounds_arr, sound_key) {
-    $('body').append(
-        $(`<embed src="${sounds_arr[sound_key]}"
-            autostart="false" width="0" height="0" id="${sound_key}"
-            enablejavascript="true">`));
-    setTimeout(function () {
-        $('#show_card').remove();
-    }, 1100);
+    if (sound) {
+        $('body').append(
+            $(`<embed src="${sounds_arr[sound_key]}"
+                autostart="false" width="0" height="0" id="${sound_key}"
+                enablejavascript="true">`));
+        setTimeout(function () {
+            $('#show_card').remove();
+        }, 1200);
+    }
 };
 
 // for (let k in sounds) {
@@ -48,10 +50,18 @@ const _cards = ['ALGE', 'ARGE', 'ANGU', 'ZAMB',
 
 let set_num = 2;
 let cards_num = 18;
+let sound = true;
+const score = 10;
+let score_counter = [0,0];
+let player = 1;
 
 const draw = function () {
 
-        console.log($('#inputCardsNum').val());
+    player = 1;
+    score_counter = [0,0];
+    $('#playerOneScore').text("Player one score is: 0 points.");
+    $('#playerTwoScore').text("Player two score is: 0 points.");
+
     if ($('#inputCardsNum').val() >= 2 && $('#inputCardsNum').val() <= 18) {
         cards_num = +$('#inputCardsNum').val();
     }
@@ -60,10 +70,11 @@ const draw = function () {
         set_num = +$('#inputSetNum').val();
     }
 
-    $('#subContainer').empty();
+    $('#board').empty();
 
-    let cards = _cards.slice(0,cards_num);
-    let temp = cards;
+    shuffleArray(_cards);
+    let cards = _cards.slice(0, cards_num);
+    let temp = cards.slice(0);
 
     for (let i = 1; i < set_num; i++) {
         cards = cards.concat(temp);
@@ -72,7 +83,7 @@ const draw = function () {
     shuffleArray(cards);
 
     const img_cards = Array.from(new Array(cards.length)).map((col, i) => {
-        return $(`<img src="http://www.flags.net/images/largeflags/${cards[i]}0001.GIF" class="front_card img-responsive" alt="Responsive image">`).attr("data", `${cards[i]}`)
+        return $(`<img src="http://www.flags.net/images/largeflags/${cards[i]}0001.GIF" class="front_card img-responsive" alt="Responsive image">`).data("card", `${cards[i]}`)
     });
 
     const back_card_img = Array.from(new Array(cards.length)).map(() => {
@@ -80,11 +91,12 @@ const draw = function () {
     });
     var row;
     for (let i = 0; i < cards.length; i++) {
-        if (i % Math.floor(Math.sqrt(cards.length)) === 0) {
+        let divider = Math.floor(Math.sqrt(cards.length)) <=6 ? Math.floor(Math.sqrt(cards.length)) : 6;
+        if (i % divider === 0) {
             row = $(`<div class="row"/>`);
-            $('#subContainer').append(row);
+            $('#board').append(row);
         }
-        let card = $(`<div class="${img_cards[i].attr("data")} card "/>`);
+        let card = $(`<div class="${img_cards[i].data("card")} card "/>`);
 
         card.append(img_cards[i]);
         card.append(back_card_img[i]);
@@ -94,62 +106,76 @@ const draw = function () {
 
 draw();
 
-const card_click = function () {
-    // play_sound(sounds, "show_card");
-    // $('#show_card').get(0).play();
+const card_click = function (cards) {
+    if ($(this).hasClass('is_active')) {
+        return;
+    };
+    if(sound){
+        // play_sound(sounds, "show_card");
+        // $('#show_card').get(0).play();
+    }
     $(this).toggleClass("is_active");
     $(this).children(".back_card").slideUp(200);
 
-    // $(this).children(".front_card").css("position", "absolute");
-    // $(this).children(".back_card").css("position", "static");
-    // $(this).children(".back_card").removeProp("position");
-
-    let card_name = $(this).children(".front_card").attr("data");
-    let actives_cards = $(`.is_active`);
+    let card_name = $(this).children(".front_card").data("card");
+    let actives_cards = $(".is_active");
     let set_counter = 0;
 
     if (actives_cards.length === set_num) {
-        $('#subContainer').off("click", ".row .card");
+        $('#board').off("click", ".row .card");
+        // actives_cards.each((card) => {
+        //     if (card.find('.front_card').data('card') === card_name) {
         actives_cards.toArray().forEach((card, i) => {
             if (actives_cards.eq(i).hasClass(card_name)) {
                 set_counter += 1;
             }
         });
         if (set_counter === set_num) {
-            play_sound(sounds, "success");
+            if(sound){
+                play_sound(sounds, "success");
+            }
+            score_counter[player-1] += score;
+            console.log(set_counter[0]);
+            console.log(set_counter[1]);
+            $('#playerOneScore').text(`Player one score is: ${score_counter[0]} points.`);
+            $('#playerTwoScore').text(`Player two score is: ${score_counter[1]} points.`);
             actives_cards.toggleClass("is_active");
             actives_cards.children(".front_card").toggleClass("is_found");
-            $('#subContainer').on("click", ".row .card", card_click);
+            $('#board').on("click", ".row .card", card_click);
             if ($('.is_found').length === cards.length) {
                 setTimeout(function () {
-                    // alert("Great, You won!");
-                    // $('#won').play();
-                    play_sound(sounds, "won");
-                    $('#subContainer').off("click", ".row .card", card_click);
-                }, 300);
+                    if(sound){
+                        // $('#won').play();
+                        play_sound(sounds, "won");
+                    }
+                    $('#board').off("click", ".row .card", card_click);
+                }, 1100);
             }
         }
         else {
+            player = ((player -1) ^ 1) + 1;
             actives_cards.toggleClass("is_active");
-            play_sound(sounds, "wrong");
+            if(sound){
+                play_sound(sounds, "wrong");
+            }
             setTimeout(function () {
                 actives_cards.children(".back_card").slideDown(200);
-                $('#subContainer').on("click", ".row .card", card_click);
+                $('#board').on("click", ".row .card", card_click);
             }, 1000);
         }
     }
 };
 
-$('#subContainer').on("click", ".row .card", card_click);
+$('#board').on("click", ".row .card", card_click);
 
-$('#inputSetNum').on("input", () => {
-    draw();
-});
-
-$('#inputCardsNum').on("input", () => {
+$('#inputSetNum,#inputCardsNum').on("input", () => {
     draw();
 });
 
 $('#ButtonStart').on("click", () => {
     draw();
+});
+
+$('#CheckboxSound').on("change", () => {
+    sound = document.getElementById("CheckboxSound").checked;
 });

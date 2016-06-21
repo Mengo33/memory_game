@@ -9,31 +9,49 @@
 <body>
 
 <div class="container" style="align-content: center;">
-    <form data-toggle="validator" role="form">
-        <div class="form-group col-sm-2">
-            <label for="inputSetNum" class="control-label">Cards For a Set</label>
-            <div class="input-group">
-                <input type="number" class="form-control" id="inputSetNum" data-match="#inputCardsNum" min="2" max="10"
-                       placeholder="2-10" data-error="Between 2 - 10 Only" value="2" required>
-                <div class="help-block">Between 2 - 10 Only</div>
-            </div>
+    <div class="row">
+        <div class="col">
+            <form data-toggle="validator" role="form">
+                <div class="form-group col-sm-2">
+                    <label for="inputSetNum" class="control-label">Cards For a Set</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="inputSetNum" data-match="#inputCardsNum" min="2" max="10"
+                               placeholder="2-10" data-error="Between 2 - 10 Only" value="2" required>
+                        <div class="help-block">Between 2 - 10 Only</div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label for="inputCardsNum" class="control-label">Types Of Cards</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="inputCardsNum" min="2" max="18" placeholder="2-18"
+                               data-error="Between 2 - 18 Only" value="2" required>
+                        <div class="help-block">Between 2 - 18 Only</div>
+                    </div>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" class="checkbox" id="CheckboxSound" checked="checked">
+                        Sound
+                    </label>
+                </div>
+            </form>
+            <!--<div class="form-group col-sm-1">-->
+            <button id="ButtonStart" class="btn btn-default">Start</button>
+            <!--</div>-->
         </div>
-        <div class="form-group col-sm-2">
-            <label for="inputCardsNum" class="control-label">Types Of Cards</label>
-            <div class="input-group">
-                <input type="number" class="form-control" id="inputCardsNum" min="2" max="18" placeholder="2-18"
-                       data-error="Between 2 - 18 Only" value="2" required>
-                <div class="help-block">Between 2 - 18 Only</div>
-            </div>
-        </div>
-        <br/>
-    </form>
-    <!--<div class="form-group col-sm-1">-->
-        <button id="ButtonStart" class="btn btn-default">Start</button>
-    <!--</div>-->
-    <div class="container" id="subContainer">
-
     </div>
+    <div class="row">
+        <div class="col">
+             <h2><span class="label label-default " id="playerOneScore"></span>
+            <span class="label label-default" id="playerTwoScore"></span></h2>
+        </div>
+    </div>
+     <div class="row">
+        <div id="board" class="col">
+
+        </div>
+    </div>
+
 </div>
 
 <script src="js/lodash.js"></script>
